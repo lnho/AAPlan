@@ -6,12 +6,13 @@
 - jdk6+  
 - tomcat6+  
 - maven  
+- mysql  
   
 ##部署
 - 修改配置文件`src\main\resources\servers_cfg.properties`中关于数据库与管理员的配置内容。  
+- 导入数据库初始化脚本`src\main\sql\aaplan_test.sql`。
 - 源码使用Maven构建，确保安装Maven的情况下，在文件目录运行  
   
   `mvn clean package -DskipTests`  
-  
 
 - 把war包拷到tomcat目录下的Webapp目录下，运行tomcat。
