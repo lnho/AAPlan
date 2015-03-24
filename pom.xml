@@ -6,7 +6,7 @@
     <groupId>com.lnho</groupId>
     <artifactId>aaplan</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
 
     <name>aaplan</name>
     <url>http://maven.apache.org</url>
