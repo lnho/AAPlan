@@ -15,9 +15,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <confPath>local</confPath>
-        <dubbo.version>2.5.3-p3</dubbo.version>
-        <zookeeper.version>3.3.3</zookeeper.version>
-        <zkclient.version>0.1</zkclient.version>
         <commons-logging.version>1.1.1</commons-logging.version>
         <commons-lang.version>2.4</commons-lang.version>
         <commons-collections.version>3.2.1</commons-collections.version>
@@ -25,9 +22,7 @@
         <commons-codec.version>1.4</commons-codec.version>
         <commons-fileupload.version>1.2.2</commons-fileupload.version>
         <commons-io.version>1.3.2</commons-io.version>
-        <commons-compress.version>1.4.1</commons-compress.version>
         <spring.version>3.1.3.RELEASE</spring.version>
-        <spring-security.version>3.1.4.RELEASE</spring-security.version>
         <aspectj.version>1.7.1</aspectj.version>
         <aopalliance.version>1.0</aopalliance.version>
         <log4j.version>1.2.16</log4j.version>
@@ -39,17 +34,9 @@
         <quartz-scheduler.version>1.8.6</quartz-scheduler.version>
         <servlet-api.version>2.5</servlet-api.version>
         <jta.version>1.0</jta.version>
-        <mail.version>1.0</mail.version>
         <javaee.version>1.0</javaee.version>
         <freemarker.version>2.3.16</freemarker.version>
         <opencsv.version>2.3</opencsv.version>
-        <java-unrar.version>0.3</java-unrar.version>
-        <rome.version>1.0</rome.version>
-        <kaptcha.version>2.3.2</kaptcha.version>
-        <im4java.version>1.4.0</im4java.version>
-        <java_memcached.version>2.5.1</java_memcached.version>
-        <xmemcached.version>1.4.1</xmemcached.version>
-        <mongo-java-driver.version>2.10.1</mongo-java-driver.version>
         <luci-mint.version>1.2.0</luci-mint.version>
         <asm.version>3.3.1</asm.version>
         <cglib.version>2.2.2</cglib.version>
@@ -67,10 +54,6 @@
         <mysql.version>5.1.26</mysql.version>
         <junit.version>4.11</junit.version>
         <spring-test>3.2.0.RELEASE</spring-test>
-        <lombok.version>0.10.4</lombok.version>
-        <ermpapi.version>1.0.1</ermpapi.version>
-        <!-- junrar -->
-        <junrar.version>0.7</junrar.version>
         <!-- commons jar's version -->
         <commons-compress.version>1.5</commons-compress.version>
         <commons-io.version>2.4</commons-io.version>
@@ -172,34 +155,6 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-        <!-- spring-security lib -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-cas</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-acl</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-
 
         <!-- log lib -->
         <dependency>
@@ -303,12 +258,7 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!--lombok-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-        </dependency>
+
 
         <!---->
         <dependency>
