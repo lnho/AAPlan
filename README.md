@@ -8,7 +8,7 @@
 - maven  
   
 ##部署
-- 修改配置文件"src\main\resources\servers_cfg.properties"中关于数据库与管理员的配置内容。  
+- 修改配置文件`src\main\resources\servers_cfg.properties`中关于数据库与管理员的配置内容。  
 - 源码使用Maven构建，确保安装Maven的情况下，在文件目录运行  
   
   `mvn clean package -DskipTests`  
