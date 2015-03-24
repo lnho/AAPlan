@@ -1,9 +1,18 @@
 # AAPlan
-##¼ò½é
-ÕâÊÇÒ»Ì×»ùÓÚJavaµÄ·¹ÍÅ¹ÜÀíÏµÍ³£¬Ê¹ÓÃSpring¡¢Spring MVC¡¢MyBatis¿ò¼Ü¡£
+##ç®€ä»‹
+è¿™æ˜¯ä¸€å¥—åŸºäºJavaçš„é¥­å›¢ç®¡ç†ç³»ç»Ÿï¼Œä½¿ç”¨Springã€Spring MVCã€MyBatisæ¡†æ¶ã€‚
 
-##²¿Êğ
-1.ĞŞ¸ÄÅäÖÃÎÄ¼ş"src\main\resources\servers_cfg.properties"ÖĞ¹ØÓÚÊı¾İ¿âÓë¹ÜÀíÔ±µÄÅäÖÃÄÚÈİ¡£
-2.Ô´ÂëÊ¹ÓÃMaven¹¹½¨£¬È·±£°²×°MavenµÄÇé¿öÏÂ£¬ÔÚÎÄ¼şÄ¿Â¼ÔËĞĞ
-    mvn clean package -DskipTests
-3.°Ñwar°ü¿½µ½tomcatÄ¿Â¼ÏÂµÄWebappÄ¿Â¼ÏÂ£¬ÔËĞĞtomcat¡£
+##æ‰€éœ€ç¯å¢ƒ  
+- jdk6+  
+- tomcat6+  
+- maven  
+  
+##éƒ¨ç½²
+- ä¿®æ”¹é…ç½®æ–‡ä»¶"src\main\resources\servers_cfg.properties"ä¸­å…³äºæ•°æ®åº“ä¸ç®¡ç†å‘˜çš„é…ç½®å†…å®¹ã€‚  
+- æºç ä½¿ç”¨Mavenæ„å»ºï¼Œç¡®ä¿å®‰è£…Mavençš„æƒ…å†µä¸‹ï¼Œåœ¨æ–‡ä»¶ç›®å½•è¿è¡Œ  
+
+
+    mvn clean package -DskipTests  
+
+
+- æŠŠwaråŒ…æ‹·åˆ°tomcatç›®å½•ä¸‹çš„Webappç›®å½•ä¸‹ï¼Œè¿è¡Œtomcatã€‚
