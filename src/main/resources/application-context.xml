@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-lazy-init="false">
+
+
+    <!-- aop动态代理(强制使用CGLIB) -->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>-->
+    <!--  服务器群集IP地址-系统参数配置 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath*:servers_cfg.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 读取properties文件 -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="cacheSeconds">
+            <!-- 设置自动刷新时间，以秒为单位 -->
+            <value>86400</value>
+        </property>
+        <property name="basenames">
+            <list>
+                <value>classpath:conf/i18n/message</value>
+            </list>
+        </property>
+    </bean>
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.lnho.aaplan.service">
+        <context:exclude-filter type="regex" expression=".*?\\.action\\.*"/>
+    </context:component-scan>
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    </bean>
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <!-- 数据库驱动包 -->
+        <property name="driverClass" value="${db.driverClass}"/>
+        <!-- 数据库连接地址 -->
+        <property name="jdbcUrl" value="${db.url}"/>
+        <property name="user" value="${db.user}"/>
+        <property name="password" value="${db.password}"/>
+        <!-- 指定连接池里最小连接数 -->
+        <property name="minPoolSize" value="${db.minPoolSize}"/>
+        <!-- 指定连接池里最大连接数 -->
+        <property name="maxPoolSize" value="${db.maxPoolSize}"/>
+        <!-- 连接最大空闲时间，超过时间将被丢弃,单位是秒 -->
+        <property name="maxIdleTime" value="${db.maxIdleTime}"/>
+        <!-- 当连接池里面的连接用完的时候，C3P0一次获取的新的连接数 -->
+        <property name="acquireIncrement" value="${db.acquireIncrement}"/>
+        <!-- 指定连接池里最大缓存多少个Statement对象 -->
+        <property name="maxStatements" value="${db.maxStatements}"/>
+        <!-- 初始创建连接的数量 -->
+        <property name="initialPoolSize" value="${db.initialPoolSize}"/>
+        <!-- 每隔XX秒检查连接池里的空闲连接 ，单位是秒 -->
+        <property name="idleConnectionTestPeriod" value="${db.idleConnectionTestPeriod}"/>
+        <property name="checkoutTimeout" value="1000"/>
+    </bean>
+
+    <bean id="applicationContextUtil" class="com.lnho.aaplan.commons.context.ApplicationContextUtil"></bean>
+
+
+    <bean id="webContext" class="com.lnho.aaplan.commons.context.WebContext"/>
+
+    <!-- 定义事务管理器（声明式的事务） -->
+    <bean id="transactionManager"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="trans*" rollback-for="java.lang.Exception"/>
+        </tx:attributes>
+    </tx:advice>
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="interceptorPointCuts"
+                      expression="execution(* com.lnho.aaplan.*.service.*.trans*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="interceptorPointCuts"/>
+    </aop:config>
+    <!-- sessionFactoryBean建立 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 配置Dao接口实现xml文件路径 -->
+        <property name="mapperLocations">
+            <array>
+                <value>classpath*:mybatis/*.xml</value>
+            </array>
+        </property>
+        <!-- 配置对象PO映射路径 -->
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!--basePackage指定要扫描的包，可指定多个包，包与包之间用逗号或分号分隔-->
+        <property name="basePackage" value="com.lnho.aaplan.dao"/>
+    </bean>
+    <mvc:resources location="/fed/" mapping="/fed/**"/>
+    <context:component-scan base-package="com.lnho.aaplan">
+        <context:include-filter type="regex" expression=".*?\\.action\\.*"/>
+    </context:component-scan>
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>application/json;charset=utf-8</value>
+                        <value>text/html;charset=utf-8</value>
+                        <value>application/x-javascript;charset=utf-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- 全局异常配置 start -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">errors/error</prop>
+                <prop key="java.lang.Throwable">errors/err</prop>
+            </props>
+        </property>
+        <property name="statusCodes">
+            <props>
+                <prop key="errors/error">500</prop>
+                <prop key="errors/404">404</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN"></property>
+        <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+        <property name="defaultErrorView" value="errors/error"></property>
+        <!-- 默认HTTP状态码 -->
+        <property name="defaultStatusCode" value="500"></property>
+    </bean>
+    <!-- 全局异常配置 end -->
+
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.lnho.aaplan.commons.springmvc.DateConverter"/>
+                <bean class="com.lnho.aaplan.commons.springmvc.StringConverter"/>
+            </set>
+        </property>
+    </bean>
+
+    <bean id="scriptConversionService"
+          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="com.lnho.aaplan.commons.springmvc.DateConverter"/>
+            </set>
+        </property>
+    </bean>
+    <mvc:default-servlet-handler/>
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <property name="templateLoaderPath" value=""/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="tag_syntax">auto_detect</prop>
+                <prop key="template_update_delay">0</prop>
+                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="url_escaping_charset">UTF-8</prop>
+                <prop key="locale">en_US</prop>
+                <prop key="boolean_format">true,false</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="time_format">HH:mm:ss</prop>
+                <prop key="number_format">0.######</prop>
+                <prop key="whitespace_stripping">true</prop>
+                <!--空值处理<prop key="classic_compatible">true</prop>-->
+            </props>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+        <property name="prefix" value="/WEB-INF/template/ftl/"></property>
+        <property name="suffix" value=".ftl"></property>
+        <property name="contentType" value="textml; charset=UTF-8"/>
+        <property name="exposeSessionAttributes" value="true"/>
+        <property name="exposeSpringMacroHelpers" value="true"/>
+        <property name="viewClass" value="com.lnho.aaplan.commons.springmvc.WebFreeMarkerView"/>
+    </bean>
+    <bean class="com.lnho.aaplan.conf.Global">
+        <property name="adminUser" value="${admin.user}"></property>
+        <property name="adminPass" value="${admin.pass}"></property>
+    </bean>
+</beans>

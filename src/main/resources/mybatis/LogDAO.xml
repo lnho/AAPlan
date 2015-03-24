@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.lnho.aaplan.dao.LogDAO">
+    <select id="queryMonthsCount" parameterType="Integer" resultType="com.lnho.aaplan.bean.CountResult">
+		SELECT FROM_UNIXTIME(addtime/1000,'%Y%m') months,sum(money) COUNT FROM log where user_id=#{userId} and type=1 GROUP BY months order BY addtime DESC
+	</select>
+</mapper>
+
+
+
